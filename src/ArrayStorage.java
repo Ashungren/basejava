@@ -4,6 +4,17 @@
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
     int size = 0;
+    int check = -1;
+
+    private boolean isPresent(String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i].toString().equals(uuid)) {
+                check = i;
+                return true;
+            }
+        }
+        return false;
+    }
 
     void clear() {
         for (int i = 0; i < size; i++) {
@@ -12,28 +23,42 @@ public class ArrayStorage {
         size = 0;
     }
 
+    void update(Resume r) {
+        if (isPresent(r.toString())) {
+            System.out.println("Резюме обновлено");
+            check = -1;
+        } else {
+            System.out.println("Ошибка, резюме отсутствует в базе");
+        }
+    }
+
     void save(Resume r) {
-        storage[size] = r;
-        size++;
+        if (isPresent(r.toString())) {
+            check = -1;
+            System.out.println("Ошибка, резюме находится в базе");
+        } else {
+            storage[size] = r;
+            size++;
+        }
     }
 
     Resume get(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (storage[i].toString().equals(uuid)) {
-                return storage[i];
-            }
+        Resume result = null;
+        if (isPresent(uuid)) {
+            result = storage[check];
+            check = -1;
         }
-        return null;
+        return result;
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (storage[i].toString().equals(uuid)) {
-                storage[i] = storage[size - 1];
-                storage[size - 1] = null;
-                size--;
-                break;
-            }
+        if (isPresent(uuid)) {
+            storage[check] = storage[size - 1];
+            storage[size - 1] = null;
+            size--;
+            check = -1;
+        } else {
+            System.out.println("Ошибка, попытка удаления несуществующего резюме");
         }
     }
 
