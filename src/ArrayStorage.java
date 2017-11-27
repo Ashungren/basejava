@@ -4,16 +4,14 @@
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
     int size = 0;
-    int check = -1;
 
-    private boolean isPresent(String uuid) {
+    private int isPresent(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].toString().equals(uuid)) {
-                check = i;
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     void clear() {
@@ -23,42 +21,44 @@ public class ArrayStorage {
         size = 0;
     }
 
-    void update(Resume r) {
-        if (isPresent(r.toString())) {
-            System.out.println("Резюме обновлено");
-            check = -1;
-        } else {
+    void update(Resume rOld, Resume rNew) {
+        int check = isPresent(rOld.toString());
+        if (check == -1) {
             System.out.println("Ошибка, резюме отсутствует в базе");
+        } else {
+            storage[check] = rNew;
         }
     }
 
     void save(Resume r) {
-        if (isPresent(r.toString())) {
-            check = -1;
-            System.out.println("Ошибка, резюме находится в базе");
-        } else {
+        int check = isPresent(r.toString());
+        if (check == -1) {
             storage[size] = r;
             size++;
+        } else {
+            System.out.println("Ошибка, резюме находится в базе");
         }
     }
 
     Resume get(String uuid) {
         Resume result = null;
-        if (isPresent(uuid)) {
+        int check = isPresent(uuid);
+        if (check == -1) {
+            System.out.println("Ошибка, резюме отсутствует в базе");
+        } else {
             result = storage[check];
-            check = -1;
         }
         return result;
     }
 
     void delete(String uuid) {
-        if (isPresent(uuid)) {
+        int check = isPresent(uuid);
+        if (check == -1) {
+            System.out.println("Ошибка, попытка удаления несуществующего резюме");
+        } else {
             storage[check] = storage[size - 1];
             storage[size - 1] = null;
             size--;
-            check = -1;
-        } else {
-            System.out.println("Ошибка, попытка удаления несуществующего резюме");
         }
     }
 
