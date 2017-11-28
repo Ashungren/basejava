@@ -22,41 +22,40 @@ public class ArrayStorage {
     }
 
     void update(Resume rOld, Resume rNew) {
-        int check = getIndex(rOld.toString());
-        if (check == -1) {
-            System.out.println("Ошибка, резюме отсутствует в базе");
+        int index = getIndex(rOld.toString());
+        if (index == -1) {
+            System.out.println("Resume " + rOld.toString() + " not exist");
         } else {
-            storage[check] = rNew;
+            storage[index] = rNew;
         }
     }
 
     void save(Resume r) {
-        int check = getIndex(r.toString());
-        if (check == -1) {
+        if (getIndex(r.toString()) != -1) {
+            System.out.println("Resume " + r.toString() + " already exist");
+        } else if (size == storage.length) {
+            System.out.println("Storage overflow");
+        } else {
             storage[size] = r;
             size++;
-        } else {
-            System.out.println("Ошибка, резюме находится в базе");
         }
     }
 
     Resume get(String uuid) {
-        Resume result = null;
-        int check = getIndex(uuid);
-        if (check == -1) {
-            System.out.println("Ошибка, резюме отсутствует в базе");
-        } else {
-            result = storage[check];
+        int index = getIndex(uuid);
+        if (index == -1) {
+            System.out.println("Resume " + uuid + " not exist");
+            return null;
         }
-        return result;
+        return storage[index];
     }
 
     void delete(String uuid) {
-        int check = getIndex(uuid);
-        if (check == -1) {
-            System.out.println("Ошибка, попытка удаления несуществующего резюме");
+        int index = getIndex(uuid);
+        if (index == -1) {
+            System.out.println("Resume " + uuid + " not exist");
         } else {
-            storage[check] = storage[size - 1];
+            storage[index] = storage[size - 1];
             storage[size - 1] = null;
             size--;
         }
@@ -66,9 +65,9 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] resumes = new Resume[size];
-        System.arraycopy(storage, 0, resumes, 0, size);
-        return resumes;
+        Resume[] result = new Resume[size];
+        System.arraycopy(storage, 0, result, 0, size);
+        return result;
     }
 
     int size() {

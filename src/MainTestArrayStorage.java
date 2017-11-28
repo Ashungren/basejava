@@ -32,7 +32,6 @@ public class MainTestArrayStorage {
         ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r4);
 
-
         printAll();
         ARRAY_STORAGE.delete(r1.uuid);
         printAll();
