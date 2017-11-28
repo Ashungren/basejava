@@ -5,7 +5,7 @@ public class ArrayStorage {
     Resume[] storage = new Resume[10000];
     int size = 0;
 
-    private int isPresent(String uuid) {
+    private int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].toString().equals(uuid)) {
                 return i;
@@ -22,7 +22,7 @@ public class ArrayStorage {
     }
 
     void update(Resume rOld, Resume rNew) {
-        int check = isPresent(rOld.toString());
+        int check = getIndex(rOld.toString());
         if (check == -1) {
             System.out.println("Ошибка, резюме отсутствует в базе");
         } else {
@@ -31,7 +31,7 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        int check = isPresent(r.toString());
+        int check = getIndex(r.toString());
         if (check == -1) {
             storage[size] = r;
             size++;
@@ -42,7 +42,7 @@ public class ArrayStorage {
 
     Resume get(String uuid) {
         Resume result = null;
-        int check = isPresent(uuid);
+        int check = getIndex(uuid);
         if (check == -1) {
             System.out.println("Ошибка, резюме отсутствует в базе");
         } else {
@@ -52,7 +52,7 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        int check = isPresent(uuid);
+        int check = getIndex(uuid);
         if (check == -1) {
             System.out.println("Ошибка, попытка удаления несуществующего резюме");
         } else {
