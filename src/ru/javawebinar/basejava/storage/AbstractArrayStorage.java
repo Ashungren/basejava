@@ -22,13 +22,27 @@ public abstract class AbstractArrayStorage implements Storage {
         size = 0;
     }
 
-    public abstract void update(Resume r);
+    public void update(Resume r) {
+        int index = getIndex(r.getUuid());
+        if (index < 0) {
+            System.out.println("Resume " + r.getUuid() + " not exist");
+        } else {
+            storage[index] = r;
+        }
+    }
 
     public abstract void save(Resume r);
 
-    public abstract void delete(String uuid);
+    public Resume get(String uuid) {
+        int index = getIndex(uuid);
+        if (index < 0) {
+            System.out.println("Resume " + uuid + " not exist");
+            return null;
+        }
+        return storage[index];
+    }
 
-    public abstract Resume get(String uuid);
+    public abstract void delete(String uuid);
 
     public Resume[] getAll() {
         return Arrays.copyOfRange(storage, 0, size);

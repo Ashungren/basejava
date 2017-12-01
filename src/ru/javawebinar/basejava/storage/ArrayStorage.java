@@ -7,16 +7,6 @@ import ru.javawebinar.basejava.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
     @Override
-    public void update(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index == -1) {
-            System.out.println("Resume " + r.getUuid() + " not exist");
-        } else {
-            storage[index] = r;
-        }
-    }
-
-    @Override
     public void save(Resume r) {
         if (getIndex(r.getUuid()) != -1) {
             System.out.println("Resume " + r.getUuid() + " already exist");
@@ -38,16 +28,6 @@ public class ArrayStorage extends AbstractArrayStorage {
             storage[size - 1] = null;
             size--;
         }
-    }
-
-    @Override
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index == -1) {
-            System.out.println("Resume " + uuid + " not exist");
-            return null;
-        }
-        return storage[index];
     }
 
     @Override
