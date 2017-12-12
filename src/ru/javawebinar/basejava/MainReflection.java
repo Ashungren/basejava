@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 public class MainReflection {
 
-    public static void main(String[] args) throws IllegalAccessException, InvocationTargetException {
+    public static void main(String[] args) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         Resume r = new Resume();
         Field field = r.getClass().getDeclaredFields()[0];
         field.setAccessible(true);
@@ -16,7 +16,7 @@ public class MainReflection {
         System.out.println(field.get(r));
         field.set(r, "new_uuid");
         System.out.println(r);
-        Method method = r.getClass().getMethods()[1];
-        System.out.println(method.invoke(r, null));
+        Method method = r.getClass().getMethod("toString");
+        System.out.println(method.invoke(r));
     }
 }

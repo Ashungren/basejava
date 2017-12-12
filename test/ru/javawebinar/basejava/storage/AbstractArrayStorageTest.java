@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.javawebinar.basejava.exception.ExistException;
 import ru.javawebinar.basejava.exception.NotExistException;
+import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 public abstract class AbstractArrayStorageTest {
@@ -36,13 +37,15 @@ public abstract class AbstractArrayStorageTest {
     public void clearNotExist() throws Exception {
         storage.clear();
         storage.get(UUID_1);
+        storage.get(UUID_2);
+        storage.get(UUID_3);
     }
 
     @Test
     public void update() throws Exception {
-        storage.update(new Resume(UUID_1));
-        storage.update(new Resume(UUID_2));
-        storage.update(new Resume(UUID_3));
+        Resume newResume = new Resume(UUID_1);
+        storage.update(newResume);
+        Assert.assertTrue(newResume == storage.get(UUID_1));
     }
 
     @Test(expected = NotExistException.class)
@@ -60,11 +63,18 @@ public abstract class AbstractArrayStorageTest {
         storage.save(new Resume(UUID_1));
     }
 
+    @Test(expected = StorageException.class)
+    public void saveOverflow() throws Exception {
+        for (int i = 4; i < AbstractArrayStorage.STORAGE_LIMIT + 2; i++) {
+            storage.save(new Resume("uuid" + i));
+        }
+    }
+
     @Test
     public void get() throws Exception {
-        storage.get(UUID_1);
-        storage.get(UUID_2);
-        storage.get(UUID_3);
+        Assert.assertEquals("uuid1", storage.get(UUID_1).getUuid());
+        Assert.assertEquals("uuid2", storage.get(UUID_2).getUuid());
+        Assert.assertEquals("uuid3", storage.get(UUID_3).getUuid());
     }
 
     @Test(expected = NotExistException.class)
@@ -72,11 +82,14 @@ public abstract class AbstractArrayStorageTest {
         storage.get(UUID_test);
     }
 
-    @Test
+    @Test(expected = NotExistException.class)
     public void delete() throws Exception {
         storage.delete(UUID_1);
         storage.delete(UUID_2);
         storage.delete(UUID_3);
+        storage.get(UUID_1);
+        storage.get(UUID_2);
+        storage.get(UUID_3);
     }
 
     @Test(expected = NotExistException.class)
