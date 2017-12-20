@@ -82,7 +82,9 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void insertElement(Resume r, int index) {
-        index++;
+        if (index < 0) {
+            index = storage.size();
+        }
         storage.add(index, r);
     }
 
