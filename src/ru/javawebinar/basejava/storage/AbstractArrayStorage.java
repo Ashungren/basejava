@@ -1,7 +1,5 @@
 package ru.javawebinar.basejava.storage;
 
-import ru.javawebinar.basejava.exception.ExistException;
-import ru.javawebinar.basejava.exception.NotExistException;
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
@@ -17,27 +15,19 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
     protected int size = 0;
 
     @Override
-    public void clear() {
+    protected void doClear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
     @Override
-    public void update(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index < 0) {
-            throw new NotExistException(r.getUuid());
-        } else {
-            storage[index] = r;
-        }
+    protected void doUpdate(Resume r, Integer index) {
+        storage[index] = r;
     }
 
     @Override
-    public void save(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index >= 0) {
-            throw new ExistException(r.getUuid());
-        } else if (size >= STORAGE_LIMIT) {
+    protected void doSave(Resume r, Integer index) {
+        if (size >= STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", r.getUuid());
         } else {
             insertElement(r, index);
@@ -46,36 +36,24 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
     }
 
     @Override
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistException(uuid);
-        }
+    protected Resume doGet(String uuid, Integer index) {
         return storage[index];
     }
 
     @Override
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistException(uuid);
-        } else {
-            fillDeletedElement(index);
-            storage[size - 1] = null;
-            size--;
-        }
+    protected void doDelete(String uuid, Integer index) {
+        fillDeletedElement(index);
+        storage[size - 1] = null;
+        size--;
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
     @Override
-    public Resume[] getAll() {
+    protected Resume[] doGetAll() {
         return Arrays.copyOfRange(storage, 0, size);
     }
 
     @Override
-    public int size() {
+    protected int doSize() {
         return size;
     }
 }
