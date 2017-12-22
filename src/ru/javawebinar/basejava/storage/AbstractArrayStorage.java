@@ -15,18 +15,18 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
     protected int size = 0;
 
     @Override
-    protected void doClear() {
+    public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
     @Override
-    protected void doUpdate(Resume r, Integer index) {
-        storage[index] = r;
+    protected void doUpdate(Resume r, Object index) {
+        storage[(int) index] = r;
     }
 
     @Override
-    protected void doSave(Resume r, Integer index) {
+    protected void doSave(Resume r, Object index) {
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", r.getUuid());
         } else {
@@ -36,24 +36,29 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
     }
 
     @Override
-    protected Resume doGet(String uuid, Integer index) {
-        return storage[index];
+    protected Resume doGet(Object index) {
+        return storage[(int) index];
     }
 
     @Override
-    protected void doDelete(String uuid, Integer index) {
+    protected void doDelete(Object index) {
         fillDeletedElement(index);
         storage[size - 1] = null;
         size--;
     }
 
     @Override
-    protected Resume[] doGetAll() {
+    public Resume[] getAll() {
         return Arrays.copyOfRange(storage, 0, size);
     }
 
     @Override
-    protected int doSize() {
+    public int size() {
         return size;
+    }
+
+    @Override
+    protected boolean isExist(Object index) {
+        return (int) index >= 0;
     }
 }

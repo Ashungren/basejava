@@ -9,32 +9,32 @@ public class MapStorage extends AbstractStorage {
     Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    protected void doClear() {
+    public void clear() {
         storage.clear();
     }
 
     @Override
-    protected void doUpdate(Resume r, Integer index) {
-        storage.put(r.getUuid(), r);
+    protected void doUpdate(Resume r, Object index) {
+        storage.put(((String) index).substring(1), r);
     }
 
     @Override
-    protected void doSave(Resume r, Integer index) {
-        storage.put(r.getUuid(), r);
+    protected void doSave(Resume r, Object index) {
+        storage.put((String) index, r);
     }
 
     @Override
-    protected Resume doGet(String uuid, Integer index) {
-        return storage.get(uuid);
+    protected Resume doGet(Object index) {
+        return storage.get(((String) index).substring(1));
     }
 
     @Override
-    protected void doDelete(String uuid, Integer index) {
-        storage.remove(uuid);
+    protected void doDelete(Object index) {
+        storage.remove(((String) index).substring(1));
     }
 
     @Override
-    protected Resume[] doGetAll() {
+    public Resume[] getAll() {
         Resume[] result = new Resume[storage.size()];
         int i = 0;
         for (Map.Entry<String, Resume> entry : storage.entrySet()) {
@@ -45,27 +45,33 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected int doSize() {
+    public int size() {
         return storage.size();
     }
 
     @Override
-    protected Integer getIndex(String uuid) {
+    protected boolean isExist(Object index) {
+        String result = ((String) index).substring(0, 1);
+        return result.equals("-");
+    }
+
+    @Override
+    protected Object getIndex(String uuid) {
         for (Map.Entry<String, Resume> entry : storage.entrySet()) {
             if (uuid.equals(entry.getKey())) {
-                return 0;
+                return "-" + uuid;
             }
         }
-        return -1;
+        return uuid;
     }
 
     @Override
-    protected void insertElement(Resume r, int index) {
+    protected void insertElement(Resume r, Object index) {
 
     }
 
     @Override
-    protected void fillDeletedElement(int index) {
+    protected void fillDeletedElement(Object index) {
 
     }
 }

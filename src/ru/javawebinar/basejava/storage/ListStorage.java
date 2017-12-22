@@ -9,47 +9,52 @@ public class ListStorage extends AbstractStorage {
     List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected void doClear() {
+    public void clear() {
         storage.clear();
     }
 
     @Override
-    protected void doUpdate(Resume r, Integer index) {
-        fillDeletedElement(index);
-        insertElement(r, index);
+    protected void doUpdate(Resume r, Object index) {
+        storage.set((int) index, r);
     }
 
     @Override
-    protected void doSave(Resume r, Integer index) {
-        insertElement(r, index);
-    }
-
-    @Override
-    protected Resume doGet(String uuid, Integer index) {
-        return storage.get(index);
-    }
-
-    @Override
-    protected void doDelete(String uuid, Integer index) {
-        fillDeletedElement(index);
-    }
-
-    @Override
-    protected Resume[] doGetAll() {
-        Resume[] result = new Resume[storage.size()];
-        for (int i = 0; i < storage.size(); i++) {
-            result[i] = storage.get(i);
+    protected void doSave(Resume r, Object index) {
+        int insertIndex = (int) index;
+        if (insertIndex < 0) {
+            storage.add(r);
+        } else {
+            storage.add(insertIndex, r);
         }
-        return result;
     }
 
     @Override
-    protected int doSize() {
+    protected Resume doGet(Object index) {
+        return storage.get((int) index);
+    }
+
+    @Override
+    protected void doDelete(Object index) {
+        storage.remove((int) index);
+    }
+
+    @Override
+    public Resume[] getAll() {
+        return (Resume[]) storage.toArray();
+    }
+
+    @Override
+    public int size() {
         return storage.size();
     }
 
     @Override
-    protected Integer getIndex(String uuid) {
+    protected boolean isExist(Object index) {
+        return (int) index >= 0;
+    }
+
+    @Override
+    protected Object getIndex(String uuid) {
         for (int i = 0; i < storage.size(); i++) {
             if (uuid.equals(storage.get(i).getUuid())) {
                 return i;
@@ -59,16 +64,12 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void insertElement(Resume r, int index) {
-        if (index < 0) {
-            storage.add(r);
-        } else {
-            storage.add(index, r);
-        }
+    protected void insertElement(Resume r, Object index) {
+
     }
 
     @Override
-    protected void fillDeletedElement(int index) {
-        storage.remove(index);
+    protected void fillDeletedElement(Object index) {
+
     }
 }
