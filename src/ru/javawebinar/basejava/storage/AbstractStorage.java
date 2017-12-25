@@ -58,8 +58,4 @@ public abstract class AbstractStorage implements Storage {
     protected abstract boolean isExist(Object index);
 
     protected abstract Object getIndex(String uuid);
-
-    protected abstract void insertElement(Resume r, Object index);
-
-    protected abstract void fillDeletedElement(Object index);
 }

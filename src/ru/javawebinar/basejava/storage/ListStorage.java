@@ -40,7 +40,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return (Resume[]) storage.toArray();
+        return storage.toArray(new Resume[storage.size()]);
     }
 
     @Override
@@ -61,15 +61,5 @@ public class ListStorage extends AbstractStorage {
             }
         }
         return -1;
-    }
-
-    @Override
-    protected void insertElement(Resume r, Object index) {
-
-    }
-
-    @Override
-    protected void fillDeletedElement(Object index) {
-
     }
 }

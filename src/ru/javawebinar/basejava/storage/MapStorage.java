@@ -35,7 +35,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return (Resume[]) storage.values().toArray();
+        return storage.values().toArray(new Resume[storage.size()]);
     }
 
     @Override
@@ -45,26 +45,16 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected boolean isExist(Object index) {
-        return index != null;
+        for (Map.Entry<String, Resume> entry : storage.entrySet()) {
+            if (index.equals(entry.getKey())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     protected String getIndex(String uuid) {
-        for (Map.Entry<String, Resume> entry : storage.entrySet()) {
-            if (uuid.equals(entry.getKey())) {
-                return uuid;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    protected void insertElement(Resume r, Object index) {
-
-    }
-
-    @Override
-    protected void fillDeletedElement(Object index) {
-
+        return uuid;
     }
 }

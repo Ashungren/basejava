@@ -61,4 +61,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
     protected boolean isExist(Object index) {
         return (int) index >= 0;
     }
+
+    protected abstract void insertElement(Resume r, Object index);
+
+    protected abstract void fillDeletedElement(Object index);
 }
