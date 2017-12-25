@@ -6,60 +6,55 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    List<Resume> storage = new ArrayList<>();
+    private List<Resume> list = new ArrayList<>();
+
+    @Override
+    protected Integer getSearchKey(String uuid) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    protected boolean isExist(Object searchKey) {
+        return searchKey != null;
+    }
+
+    @Override
+    protected void doUpdate(Resume r, Object searchKey) {
+        list.set((Integer) searchKey, r);
+    }
+
+    @Override
+    protected void doSave(Resume r, Object searchKey) {
+        list.add(r);
+    }
+
+    @Override
+    protected Resume doGet(Object searchKey) {
+        return list.get((Integer) searchKey);
+    }
+
+    @Override
+    protected void doDelete(Object searchKey) {
+        list.remove(((Integer) searchKey).intValue());
+    }
 
     @Override
     public void clear() {
-        storage.clear();
-    }
-
-    @Override
-    protected void doUpdate(Resume r, Object index) {
-        storage.set((int) index, r);
-    }
-
-    @Override
-    protected void doSave(Resume r, Object index) {
-        int insertIndex = (int) index;
-        if (insertIndex < 0) {
-            storage.add(r);
-        } else {
-            storage.add(insertIndex, r);
-        }
-    }
-
-    @Override
-    protected Resume doGet(Object index) {
-        return storage.get((int) index);
-    }
-
-    @Override
-    protected void doDelete(Object index) {
-        storage.remove((int) index);
+        list.clear();
     }
 
     @Override
     public Resume[] getAll() {
-        return storage.toArray(new Resume[storage.size()]);
+        return list.toArray(new Resume[list.size()]);
     }
 
     @Override
     public int size() {
-        return storage.size();
-    }
-
-    @Override
-    protected boolean isExist(Object index) {
-        return (int) index >= 0;
-    }
-
-    @Override
-    protected Integer getIndex(String uuid) {
-        for (int i = 0; i < storage.size(); i++) {
-            if (uuid.equals(storage.get(i).getUuid())) {
-                return i;
-            }
-        }
-        return -1;
+        return list.size();
     }
 }
