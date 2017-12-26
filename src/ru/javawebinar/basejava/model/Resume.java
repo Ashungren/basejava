@@ -20,6 +20,11 @@ public class Resume {
         this.uuid = uuid;
     }
 
+    public Resume(String uuid,String fullName) {
+        this.uuid = uuid;
+        this.fullName = fullName;
+    }
+
     public String getUuid() {
         return uuid;
     }
@@ -42,5 +47,9 @@ public class Resume {
     @Override
     public String toString() {
         return uuid;
+    }
+
+    public String getFullName() {
+        return fullName;
     }
 }
