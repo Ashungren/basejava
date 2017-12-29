@@ -17,27 +17,27 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void doUpdate(Resume r, Object searchKey) {
-        map.put(((Resume)searchKey).getUuid(),r);
+        map.put(((Resume) searchKey).getUuid(), r);
     }
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return searchKey != null && map.containsKey(((Resume) searchKey).getUuid());
+        return searchKey != null;
     }
 
     @Override
     protected void doSave(Resume r, Object searchKey) {
-        map.put(r.getUuid(),r);
+        map.put(r.getUuid(), r);
     }
 
     @Override
     protected Resume doGet(Object searchKey) {
-        return map.get(((Resume)searchKey).getUuid());
+        return map.get(((Resume) searchKey).getUuid());
     }
 
     @Override
     protected void doDelete(Object searchKey) {
-        map.remove(((Resume)searchKey).getUuid());
+        map.remove(((Resume) searchKey).getUuid());
     }
 
     @Override
@@ -46,10 +46,8 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume>list= new ArrayList<>(map.values());
-        list.sort(RESUME_COMPARATOR);
-        return list;
+    protected List<Resume> createList() {
+        return new ArrayList<>(map.values());
     }
 
     @Override

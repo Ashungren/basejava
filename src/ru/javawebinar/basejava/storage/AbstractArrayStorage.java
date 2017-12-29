@@ -28,11 +28,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
         storage[(Integer) index] = r;
     }
 
-    public List<Resume> getAllSorted() {
-        Resume[]resultArray = Arrays.copyOfRange(storage, 0, size);
-        Arrays.sort(resultArray,RESUME_COMPARATOR);
+    @Override
+    public List<Resume> createList() {
+        Resume[] resultArray = Arrays.copyOfRange(storage, 0, size);
         List<Resume> resultList = new ArrayList<>();
-        Collections.addAll(resultList,resultArray);
+        Collections.addAll(resultList, resultArray);
         return resultList;
     }
 
