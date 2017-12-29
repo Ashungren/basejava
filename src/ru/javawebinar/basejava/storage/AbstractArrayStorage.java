@@ -8,9 +8,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Array based map for Resumes
- */
 public abstract class AbstractArrayStorage extends AbstractStorage implements Storage {
     protected static final int STORAGE_LIMIT = 10000;
 
@@ -31,9 +28,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
         storage[(Integer) index] = r;
     }
 
-    /**
-     * @return array, contains only Resumes in map (without null)
-     */
     public List<Resume> getAllSorted() {
         Resume[]resultArray = Arrays.copyOfRange(storage, 0, size);
         Arrays.sort(resultArray,RESUME_COMPARATOR);
