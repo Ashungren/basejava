@@ -30,10 +30,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage implements St
 
     @Override
     public List<Resume> createList() {
-        Resume[] resultArray = Arrays.copyOfRange(storage, 0, size);
-        List<Resume> resultList = new ArrayList<>();
-        Collections.addAll(resultList, resultArray);
-        return resultList;
+        return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
     }
 
     @Override
