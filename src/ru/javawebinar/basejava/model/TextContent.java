@@ -2,7 +2,7 @@ package ru.javawebinar.basejava.model;
 
 import java.util.Objects;
 
-public class TextContent {
+public class TextContent extends Content {
     private String content;
 
     public TextContent(String content) {

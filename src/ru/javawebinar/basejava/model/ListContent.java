@@ -3,7 +3,7 @@ package ru.javawebinar.basejava.model;
 import java.util.List;
 import java.util.Objects;
 
-public class ListContent {
+public class ListContent extends Content {
     private List<String> content;
 
     public ListContent(List<String> content) {
