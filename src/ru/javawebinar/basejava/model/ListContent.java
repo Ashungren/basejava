@@ -14,4 +14,10 @@ public class ListContent extends Content {
     public List<String> getContent() {
         return content;
     }
+
+    @Override
+    public String toString() {
+        return content.toString();
+    }
+
 }

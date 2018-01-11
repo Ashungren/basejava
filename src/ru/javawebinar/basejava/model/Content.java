@@ -1,4 +1,4 @@
 package ru.javawebinar.basejava.model;
 
-public abstract class Content {
+abstract public class Content {
 }

@@ -14,4 +14,9 @@ public class WorkStudyContent extends Content {
     public List<WorkStudyInfo> getContent() {
         return content;
     }
+
+    @Override
+    public String toString() {
+        return content.toString();
+    }
 }

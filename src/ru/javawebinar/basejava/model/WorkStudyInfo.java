@@ -19,4 +19,15 @@ public class WorkStudyInfo {
         this.title = title;
         this.info = info;
     }
+
+    @Override
+    public String toString() {
+        if (info != null) {
+            return "(" + "homePage: " + homePage + ", startDate: " + startDate + ", finishDate: "
+                    + finishDate + ", position: " + title + "\n, info: " + info + ")";
+        } else {
+            return "(" + "homePage: " + homePage + ", startDate: " + startDate + ", finishDate: "
+                    + finishDate + ", position: " + title + ")";
+        }
+    }
 }
