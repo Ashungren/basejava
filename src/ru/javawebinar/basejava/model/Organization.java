@@ -6,11 +6,11 @@ import java.util.List;
 public class Organization {
     private final Link homePage;
 
-    private final List<Period> periods;
+    private final List<Stage> stages;
 
-    public Organization(String name, String url, ArrayList<Period> periods) {
+    public Organization(String name, String url, List<Stage> stages) {
         this.homePage = new Link(name, url);
-        this.periods = periods;
+        this.stages = stages;
     }
 
     @Override
@@ -21,19 +21,19 @@ public class Organization {
         Organization that = (Organization) o;
 
         if (!homePage.equals(that.homePage)) return false;
-        return periods != null ? periods.equals(that.periods) : that.periods == null;
+        return stages != null ? stages.equals(that.stages) : that.stages == null;
     }
 
     @Override
     public int hashCode() {
         int result = homePage.hashCode();
-        result = 31 * result + (periods != null ? periods.hashCode() : 0);
+        result = 31 * result + (stages != null ? stages.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "Organization{" +
-                "homePage=" + homePage + periods + '}';
+                "homePage=" + homePage + stages + '}';
     }
 }

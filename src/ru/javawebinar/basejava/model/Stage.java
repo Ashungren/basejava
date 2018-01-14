@@ -1,20 +1,25 @@
 package ru.javawebinar.basejava.model;
 
+import ru.javawebinar.basejava.util.DateUtil;
+
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Objects;
 
-public class Period {
+public class Stage {
     private final LocalDate startDate;
     private final LocalDate endDate;
     private final String title;
     private final String description;
 
-    public Period(LocalDate startDate, LocalDate endDate, String title, String description) {
-        Objects.requireNonNull(startDate, "startDate must not be null");
-        Objects.requireNonNull(endDate, "endDate must not be null");
+    public Stage(int startYear, Month startMonth, int endYear, Month endMonth, String title, String description) {
+        Objects.requireNonNull(startYear, "startYear must not be null");
+        Objects.requireNonNull(startMonth, "startMonth must not be null");
+        Objects.requireNonNull(endYear, "endYear must not be null");
+        Objects.requireNonNull(endMonth, "endMonth must not be null");
         Objects.requireNonNull(title, "title must not be null");
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDate = DateUtil.of(startYear, startMonth);
+        this.endDate = DateUtil.of(endYear, endMonth);
         this.title = title;
         this.description = description;
     }
@@ -37,7 +42,7 @@ public class Period {
 
     @Override
     public String toString() {
-        return "Period{" +
+        return "Stage{" +
                 "startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", title='" + title + '\'' +
@@ -50,12 +55,12 @@ public class Period {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Period period = (Period) o;
+        Stage stage = (Stage) o;
 
-        if (!startDate.equals(period.startDate)) return false;
-        if (!endDate.equals(period.endDate)) return false;
-        if (!title.equals(period.title)) return false;
-        return description != null ? description.equals(period.description) : period.description == null;
+        if (!startDate.equals(stage.startDate)) return false;
+        if (!endDate.equals(stage.endDate)) return false;
+        if (!title.equals(stage.title)) return false;
+        return description != null ? description.equals(stage.description) : stage.description == null;
     }
 
     @Override

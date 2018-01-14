@@ -4,8 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
 
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,6 +34,35 @@ public abstract class AbstractStorageTest {
         RESUME_4 = new Resume(UUID_4, "Name4");
     }
 
+    private void fillResume(Resume r) {
+        r.addContact(ContactType.PHONE, "Test Тел.");
+        r.addContact(ContactType.SKYPE, "Test Skype");
+        r.addContact(ContactType.MAIL, "Test Почта");
+        r.addContact(ContactType.LINKEDIN, "Test Профиль LinkedIn");
+        r.addContact(ContactType.GITHUB, "Test Профиль GitHub");
+        r.addContact(ContactType.STACKOVERFLOW, "Test Профиль Stackoverflow");
+        r.addContact(ContactType.HOME_PAGE, "Test Домашняя страница");
+
+        r.addSection(SectionType.PERSONAL, new TextSection("Test Личные качества"));
+        r.addSection(SectionType.OBJECTIVE, new TextSection("Test Позиция"));
+        List<String> achievements = new ArrayList<>();
+        achievements.add("Достижение 1");
+        r.addSection(SectionType.ACHIEVEMENT, new ListSection(achievements));
+        List<String> qualifications = new ArrayList<>();
+        qualifications.add("Квалификация 1");
+        r.addSection(SectionType.QUALIFICATIONS, new ListSection(qualifications));
+        List<Organization> experience = new ArrayList<>();
+        List<Stage> workStages = new ArrayList<>();
+        workStages.add(new Stage(2000, Month.JANUARY, 2002, Month.APRIL, "position 1", "info 1"));
+        experience.add(new Organization("name 1", "url 1", workStages));
+        r.addSection(SectionType.EXPERIENCE, new OrganizationSection(experience));
+        List<Organization> education = new ArrayList<>();
+        List<Stage> studyStages = new ArrayList<>();
+        studyStages.add(new Stage(1995, Month.JULY, 1997, Month.MARCH, "position 1", null));
+        education.add(new Organization("name 1", "url 1", studyStages));
+        r.addSection(SectionType.EDUCATION, new OrganizationSection(education));
+    }
+
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
@@ -40,8 +71,11 @@ public abstract class AbstractStorageTest {
     public void setUp() throws Exception {
         storage.clear();
         storage.save(RESUME_1);
+        fillResume(RESUME_1);
         storage.save(RESUME_2);
+        fillResume(RESUME_2);
         storage.save(RESUME_3);
+        fillResume(RESUME_3);
     }
 
     @Test
