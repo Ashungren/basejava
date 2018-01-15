@@ -33,12 +33,12 @@ public class Resume implements Comparable<Resume> {
         return uuid;
     }
 
-    public void addContact(ContactType key, String value) {
-        contacts.put(key, value);
+    public void addContact(ContactType type, String value) {
+        contacts.put(type, value);
     }
 
-    public void addSection(SectionType key, Section value) {
-        sections.put(key, value);
+    public void addSection(SectionType type, Section section) {
+        sections.put(type, section);
     }
 
     public String getContact(ContactType type) {
