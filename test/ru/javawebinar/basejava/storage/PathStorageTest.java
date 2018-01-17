@@ -1,8 +1,10 @@
 package ru.javawebinar.basejava.storage;
 
-public class PathStorageTest extends AbstractStorageTest{
+import ru.javawebinar.basejava.strategy.StreamStrategy;
+
+public class PathStorageTest extends AbstractStorageTest {
 
     public PathStorageTest() {
-        super(new PathStorage(STORAGE_DIR.getAbsolutePath(),new StreamStrategy()));
+        super(new PathStorage(STORAGE_DIR.getAbsolutePath(), new StreamStrategy()));
     }
 }
