@@ -6,27 +6,42 @@ import java.io.IOException;
 
 public class MainFile {
     public static void main(String[] args) {
+        String filePath = ".\\.gitignore";
+
+        File file = new File(filePath);
+        try {
+            System.out.println(file.getCanonicalPath());
+        } catch (IOException e) {
+            throw new RuntimeException("Error", e);
+        }
+
         File dir = new File("./src/ru/javawebinar/basejava");
+        System.out.println(dir.isDirectory());
+        String[] list = dir.list();
+        if (list != null) {
+            for (String name : list) {
+                System.out.println(name);
+            }
+        }
+
+        try (FileInputStream fis = new FileInputStream(filePath)) {
+            System.out.println(fis.read());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         printDirectoryDeeply(dir, "");
     }
 
-    public static void printDirectoryDeeply(File dir,String indent) {
+    public static void printDirectoryDeeply(File dir, String offset) {
         File[] files = dir.listFiles();
-        File[] dirs;
+
         if (files != null) {
-            dirs = new File[files.length];
-            for (int i = 0; i < files.length; i++) {
-                if (files[i].isFile()){
-                    System.out.println(indent + files[i].getPath());
-                } else if (files[i].isDirectory()) {
-                    dirs[i]=files[i];
-                }
-            }
-            for (File file : dirs) {
-                if (file!=null) {
-                    System.out.println(file.getPath());
-                    indent = "    ";
-                    printDirectoryDeeply(file, indent);
+            for (File file : files) {
+                if (file.isFile()) {
+                    System.out.println(offset + "F: " + file.getName());
+                } else if (file.isDirectory()) {
+                    System.out.println(offset + "D: " + file.getName());
+                    printDirectoryDeeply(file, offset + "  ");
                 }
             }
         }
