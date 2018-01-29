@@ -61,7 +61,6 @@ public class DataStreamSerializer implements StreamSerializer {
                         break;
                 }
             }
-            // TODO implements sections
         }
     }
 
@@ -114,7 +113,6 @@ public class DataStreamSerializer implements StreamSerializer {
                         break;
                 }
             }
-            // TODO implements sections
             return resume;
         }
     }
