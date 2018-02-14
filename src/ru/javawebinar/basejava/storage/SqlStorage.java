@@ -7,32 +7,30 @@ import ru.javawebinar.basejava.util.SqlHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class SqlStorage implements Storage {
     private SqlHelper sqlHelper;
 
-    public SqlStorage(SqlHelper sqlHelper) {
-        this.sqlHelper = sqlHelper;
+    public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
+        this.sqlHelper = new SqlHelper(dbUrl, dbUser, dbPassword);
     }
 
     @Override
     public void clear() {
-        sqlHelper.setSqlCommand("DELETE FROM resume");
         sqlHelper.execute(
-                (conn, ps) -> {
+                ps -> {
                     ps.execute();
                     return null;
                 }
-        );
+                , "DELETE FROM resume");
     }
 
     @Override
     public Resume get(String uuid) {
-        sqlHelper.setSqlCommand("SELECT * FROM resume r WHERE r.uuid =?");
         return sqlHelper.execute(
-                (conn, ps) -> {
+                ps -> {
                     ps.setString(1, uuid);
                     ResultSet rs = ps.executeQuery();
                     if (!rs.next()) {
@@ -40,84 +38,80 @@ public class SqlStorage implements Storage {
                     }
                     return new Resume(uuid, rs.getString("full_name"));
                 }
-        );
+                , "SELECT * FROM resume r WHERE r.uuid =?");
     }
 
     @Override
     public void update(Resume r) {
-        sqlHelper.setSqlCommand("UPDATE resume SET full_name =? WHERE uuid =?");
         sqlHelper.execute(
-                (conn, ps) -> {
+                ps -> {
                     ps.setString(1, r.getFullName());
                     ps.setString(2, r.getUuid());
-                    ps.execute();
+                    if (ps.executeUpdate() == 0) {
+                        throw new NotExistStorageException(r.getUuid());
+                    }
                     return null;
                 }
-        );
+                , "UPDATE resume SET full_name =? WHERE uuid =?");
     }
 
     @Override
     public void save(Resume r) {
-        sqlHelper.setSqlCommand("INSERT INTO resume (uuid, full_name) VALUES (?,?)");
         sqlHelper.execute(
-                (conn, ps) -> {
+                ps -> {
                     ps.setString(1, r.getUuid());
                     ps.setString(2, r.getFullName());
                     try {
                         ps.execute();
-                    } catch (org.postgresql.util.PSQLException e) {
-                        throw new ExistStorageException(r.getUuid());
+                    } catch (SQLException e) {
+                        if (Objects.equals(e.getSQLState(), "23505")) {
+                            throw new ExistStorageException(r.getUuid());
+                        }
                     }
                     return null;
                 }
-        );
+                , "INSERT INTO resume (uuid, full_name) VALUES (?,?)");
     }
 
     @Override
     public void delete(String uuid) {
-        sqlHelper.setSqlCommand("DELETE FROM resume r WHERE r.uuid =?");
         sqlHelper.execute(
-                (conn, ps) -> {
+                ps -> {
                     ps.setString(1, uuid);
-                    try {
-                        ps.executeQuery();
-                    } catch (org.postgresql.util.PSQLException e) {
+                    if (ps.executeUpdate() == 0) {
                         throw new NotExistStorageException(uuid);
                     }
                     return null;
                 }
-        );
+                , "DELETE FROM resume r WHERE r.uuid =?");
     }
 
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> resumeList = new ArrayList<>();
-        sqlHelper.setSqlCommand("SELECT * FROM resume r WHERE r.uuid IS NOT NULL");
         return sqlHelper.execute(
-                (conn, ps) -> {
+                ps -> {
                     ResultSet rs = ps.executeQuery();
                     while (rs.next()) {
-                        resumeList.add(new Resume(rs.getString(1).replaceAll(" ", "")
-                                , rs.getString(2).replaceAll(" ", "")));
+                        resumeList.add(new Resume(rs.getString(1).trim(),
+                                rs.getString(2).trim()));
                     }
-                    Collections.sort(resumeList);
                     return resumeList;
                 }
-        );
+                , "SELECT * FROM resume r WHERE r.uuid IS NOT NULL ORDER BY uuid");
     }
 
     @Override
     public int size() {
-        sqlHelper.setSqlCommand("SELECT * FROM resume r WHERE r.uuid IS NOT NULL");
         return sqlHelper.execute(
-                (conn, ps) -> {
+                ps -> {
                     ResultSet rs = ps.executeQuery();
-                    int i = 0;
+                    int result = 0;
                     while (rs.next()) {
-                        i++;
+                        result = rs.getInt(1);
                     }
-                    return i;
+                    return result;
                 }
-        );
+                , "SELECT COUNT(uuid) FROM resume");
     }
 }
