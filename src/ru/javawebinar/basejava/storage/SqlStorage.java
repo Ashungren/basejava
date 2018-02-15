@@ -106,11 +106,7 @@ public class SqlStorage implements Storage {
         return sqlHelper.execute(
                 ps -> {
                     ResultSet rs = ps.executeQuery();
-                    int result = 0;
-                    while (rs.next()) {
-                        result = rs.getInt(1);
-                    }
-                    return result;
+                    return rs.next() ? rs.getInt(1) : 0;
                 }
                 , "SELECT COUNT(uuid) FROM resume");
     }
