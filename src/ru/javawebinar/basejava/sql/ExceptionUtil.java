@@ -18,7 +18,7 @@ public class ExceptionUtil {
             String result = e.getSQLState();
             if (result.equals("23505")) {
                 return new ExistStorageException(null);
-            } else if (result.equals("23503")||result.equals("24000")) {
+            } else if (result.equals("23503")) {
                 return new NotExistStorageException(null);
             }
         }
