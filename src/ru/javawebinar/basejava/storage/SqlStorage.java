@@ -57,12 +57,12 @@ public class SqlStorage implements Storage {
                             throw new NotExistStorageException(r.getUuid());
                         }
                     }
-                    sqlHelper.execute("DELETE FROM contact WHERE resume_uuid = ?", ps -> {
-                                ps.setString(1, r.getUuid());
-                                ps.execute();
-                                return null;
-                            }
-                    );
+                    try (PreparedStatement ps = conn.prepareStatement("" +
+                            "  DELETE FROM contact" +
+                            "        WHERE resume_uuid = ?")) {
+                        ps.setString(1, r.getUuid());
+                        ps.execute();
+                    }
                     editContacts(conn, r);
                     return null;
                 }
