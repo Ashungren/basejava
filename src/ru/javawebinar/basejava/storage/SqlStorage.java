@@ -71,8 +71,8 @@ public class SqlStorage implements Storage {
                     throw new NotExistStorageException(r.getUuid());
                 }
             }
-            deleteContactsOrSections(r, "DELETE FROM contact WHERE resume_uuid=?");
-            deleteContactsOrSections(r, "DELETE FROM section WHERE resume_uuid=?");
+            deleteContactsOrSections(conn, r, "DELETE FROM contact WHERE resume_uuid=?");
+            deleteContactsOrSections(conn, r, "DELETE FROM section WHERE resume_uuid=?");
             insertContact(conn, r);
             insertSection(conn, r);
             return null;
@@ -186,12 +186,11 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void deleteContactsOrSections(Resume r, String sqlCommand) {
-        sqlHelper.execute(sqlCommand, ps -> {
+    private void deleteContactsOrSections(Connection conn, Resume r, String sqlCommand) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement(sqlCommand)) {
             ps.setString(1, r.getUuid());
             ps.execute();
-            return null;
-        });
+        }
     }
 
     private void addContact(ResultSet rs, Resume r) throws SQLException {
