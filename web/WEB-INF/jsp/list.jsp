@@ -27,6 +27,9 @@
                 <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"></a></td>
             </tr>
         </c:forEach>
+        <tr>
+            <td colspan="4"><a href="resume?uuid=null&action=add"><img src="img/add.png"></a></td>
+        </tr>
     </table>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
