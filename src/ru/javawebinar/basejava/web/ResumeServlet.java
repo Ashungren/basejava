@@ -116,13 +116,13 @@ public class ResumeServlet extends HttpServlet {
                         case OBJECTIVE:
                         case PERSONAL:
                             if (section == null) {
-                                section = new TextSection();
+                                section = new TextSection("");
                             }
                             break;
                         case ACHIEVEMENT:
                         case QUALIFICATIONS:
                             if (section == null) {
-                                section = new ListSection();
+                                section = new ListSection("");
                             }
                             break;
                         case EXPERIENCE:
