@@ -71,10 +71,7 @@ public class ResumeServlet extends HttpServlet {
                                                 DateUtil.stringToDate(endDates[j]), titles[j], descriptions[j]));
                                     }
                                 }
-                                System.out.println(value);
-                                System.out.println(urls[i] == null ? "" : urls[i]);
-                                System.out.println(positions);
-                                organizations.add(new Organization(new Link(value, urls[i] == null ? "" : urls[i]), positions));
+                                organizations.add(new Organization(new Link(name, urls[i]), positions));
                             }
                         }
                         r.addSection(type, new OrganizationSection(organizations));
@@ -110,7 +107,7 @@ public class ResumeServlet extends HttpServlet {
                 break;
             case "edit":
                 r = storage.get(uuid);
-                for (SectionType type : SectionType.values()){
+                for (SectionType type : SectionType.values()) {
                     Section section = r.getSection(type);
                     switch (type) {
                         case OBJECTIVE:

@@ -50,7 +50,7 @@
                         </dl>
                         <dl>
                             <dt>Сайт учреждения</dt>
-                            <dd><input type="text" name="${type}" size=100 value="${organization.homePage.url}"></dd>
+                            <dd><input type="text" name="${type}url" size=100 value="${organization.homePage.url}"></dd>
                         </dl>
                         <br>
                         <c:forEach var="position" items="${organization.positions}">
